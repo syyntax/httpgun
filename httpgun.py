@@ -1,46 +1,15 @@
+from os.path import abspath, join, dirname
 import requests
 from random import randint
-from json import loads, dumps
+from json import loads
+from lib.httpgunlib import Request, UserAgent
+
+# Path for this script
+scr_path = dirname(abspath(__file__))
 
 
-class Request:
-    def __init__(self, id, name, user_agent):
-        self.id = id
-        self.name = name
-        self.user_agent = user_agent
-
-
-class UserAgent:
-    def __init__(self, user_agent, OS, enabled, hardware, popularity):
-        self.user_agent = user_agent
-        self.OS = OS
-        self.enabled = enabled
-        self.hardware = hardware
-        self.popularity = popularity
-
-    def set_user_agent(self, user_agent):
-        self.user_agent = user_agent
-        return user_agent
-
-    def set_OS(self, OS):
-        self.OS = OS
-        return OS
-
-    def set_enabled(self, enabled):
-        self.enabled = enabled
-        return enabled
-
-    def set_hardware(self, hardware):
-        self.hardware = hardware
-        return hardware
-
-    def set_popularity(self, popularity):
-        self.popularity = popularity
-        return popularity
-
-
-def get_http(URL, http_headers):
-    return requests.get(URL, headers=http_headers)
+def get_http(url_string, http_headers):
+    return requests.get(url_string, headers=http_headers)
 
 
 def get_rand42():
@@ -52,6 +21,14 @@ def get_rand42():
     return num
 
 
+def populate_user_agents(user_agents_list):
+    user_agent_lst = list()
+    for obj in user_agents_list:
+        user_agent_lst.append(obj)
+
+    return user_agent_lst
+
+
 # r = get_http("http://nyu.edu", {"User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, "
 #                                "like Gecko) Chrome/87.0.4280.66 Safari/537.36", "Connection": "keep-alive",
 #                                "Cache-Control": "max-age=0", "Upgrade-Insecure-Requests": "1", "Accept":
@@ -61,4 +38,7 @@ def get_rand42():
 #                                f"BIGipServer~WSQ-EDU-MED~www-http={get_rand42()}",
 #                                "If-None-Match": "781285-15230-5b48b9dd4ba52"})
 
-user_agents = loads()
+user_agents = loads(open(abspath(join(scr_path, 'data/user_agents.json')), 'r').read())['headers']['User-agent']['Chr'
+                                                                                                                 'ome']
+
+a = populate_user_agents(user_agents)
